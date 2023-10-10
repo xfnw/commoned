@@ -5,9 +5,11 @@ ed but lisp
 - [x] q - quit
 - [ ] \n - ce-command-enter
 - [x] : - ce-command-eval
+- [ ] ; - ce-command-eval-region
 - [ ] , - ce-command-swappoint
 - [ ] / - ce-command-search
 - [ ] ? - ce-command-search-backwards
+- [ ] = - ce-command-get-point
 - [ ] a - ce-command-add
 - [ ] B - ce-command-open
 - [ ] c - ce-command-line-replace
@@ -19,4 +21,4 @@ ed but lisp
 - [ ] p - ce-command-print
 - [ ] s - ce-command-reg-replace
 - [ ] w - ce-command-write
-- [ ] 0 - ce-command-number
+- [x] 0 - ce-command-number

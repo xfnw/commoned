@@ -4,9 +4,11 @@
 (defvar ce-commands-alist '((#\q . quit)
  (#\Newline . ce-command-enter)
  (#\: . ce-command-eval)
+ (#\; . ce-command-eval-region)
  (#\, . ce-command-swappoint)
  (#\/ . ce-command-search)
  (#\? . ce-command-search-backwards)
+ (#\= . ce-command-get-point)
  (#\a . ce-command-add)
  (#\B . ce-command-open)
  (#\c . ce-command-line-replace)
@@ -46,7 +48,9 @@
 
 (defun ce-reset-point ()
   "fix point to allow inputting new numbers,
-  should be called at the end of most commands"
+  should be called at the beginning of most commands"
+  (if (= 1 newpoint)
+   (setq inpoint outpoint))
   (setq newpoint 0))
 
 (defun ce-repl ()
@@ -60,6 +64,12 @@
 
 (defun ce-command-eval (c)
   "evaluate a lisp expression"
-  (format t "~a~%" (eval (read)))
-  (ce-reset-point))
+  (ce-reset-point)
+  (format t "~a~%" (eval (read))))
+
+(defun ce-command-number (c)
+  "input a number"
+  (if (= 0 newpoint)
+    (progn (setq newpoint 1) (setq outpoint 0)))
+  (setq outpoint (+ (* 10 outpoint) (digit-char-p c))))
 
