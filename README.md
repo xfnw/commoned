@@ -13,7 +13,7 @@ ed but lisp
 - [ ] a - ce-command-add
 - [ ] B - ce-command-open
 - [ ] c - ce-command-line-replace
-- [ ] h - ce-command-help
+- [x] h - ce-command-help
 - [ ] i - ce-command-insert
 - [ ] I - ce-command-insert-beg
 - [ ] o - ce-command-newline
@@ -22,3 +22,4 @@ ed but lisp
 - [ ] s - ce-command-reg-replace
 - [ ] w - ce-command-write
 - [x] 0 - ce-command-number
+
