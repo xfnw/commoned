@@ -6,10 +6,10 @@ ed but lisp
 - [ ] \n - ce-command-enter
 - [x] : - ce-command-eval
 - [ ] ; - ce-command-eval-region
-- [ ] , - ce-command-swappoint
+- [x] , - ce-command-swap-point
 - [ ] / - ce-command-search
 - [ ] ? - ce-command-search-backwards
-- [ ] = - ce-command-get-point
+- [x] = - ce-command-get-point
 - [ ] a - ce-command-add
 - [ ] B - ce-command-open
 - [ ] c - ce-command-line-replace
