@@ -32,6 +32,8 @@
  (#\9 . ce-command-number)
  ))
 
+(defvar buffer '("test" "buffer" "beep" "boop"))
+
 ; newpoint values:
 ; 0 - reusing previous point
 ; 1 - outpoint set, inpoint is outpoint
@@ -66,6 +68,20 @@
      (if cmd
       (funcall cmd input)
       (progn (read-line) (setq newpoint 0) (format t "?~%")))))))
+
+(defun ce-command-enter (c)
+  "process newlines if not eaten by another command"
+  (if (= 0 newpoint)
+   (if (>= (+ 1 outpoint) (list-length buffer))
+    (progn
+     (format t "?~%")
+     (return-from ce-command-enter))
+    (progn
+     (setq outpoint (+ 1 outpoint))
+     (setq inpoint outpoint)))
+   (ce-reset-input))
+  (let ((out (mod outpoint (list-length buffer))))
+   (format t "~{~a~%~}" (subseq buffer out (+ 1 out)))))
 
 (defun ce-command-eval (c)
   "evaluate a lisp expression"
@@ -110,3 +126,10 @@ specific command. the recognized commands are as follows:
     (progn (read-line) (help (cdr (assoc key ce-commands-alist))))))
   (format t "~%"))
 
+(defun ce-command-print (c)
+  "print a region"
+  (ce-reset-input)
+  (read-line)
+  (let ((mlen (list-length buffer)))
+   (let ((in (mod inpoint mlen)) (out (+ 1 (mod outpoint mlen))))
+    (format t "~{~a~%~}" (subseq buffer in out)))))

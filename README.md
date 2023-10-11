@@ -3,7 +3,7 @@ ed but lisp
 
 ## commands
 - [x] q - quit
-- [ ] \n - ce-command-enter
+- [x] \n - ce-command-enter
 - [x] : - ce-command-eval
 - [ ] ; - ce-command-eval-region
 - [x] , - ce-command-swap-point
@@ -18,7 +18,7 @@ ed but lisp
 - [ ] I - ce-command-insert-beg
 - [ ] o - ce-command-newline
 - [ ] O - ce-command-newline-before
-- [ ] p - ce-command-print
+- [x] p - ce-command-print
 - [ ] s - ce-command-reg-replace
 - [ ] w - ce-command-write
 - [x] 0 - ce-command-number
