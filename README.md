@@ -11,7 +11,7 @@ ed but lisp
 - [ ] ? - ce-command-search-backwards
 - [x] = - ce-command-get-point
 - [ ] a - ce-command-add
-- [ ] B - ce-command-open
+- [x] B - ce-command-open
 - [ ] c - ce-command-line-replace
 - [x] h - ce-command-help
 - [ ] i - ce-command-insert
@@ -20,6 +20,6 @@ ed but lisp
 - [ ] O - ce-command-newline-before
 - [x] p - ce-command-print
 - [ ] s - ce-command-reg-replace
-- [ ] w - ce-command-write
+- [x] w - ce-command-write
 - [x] 0 - ce-command-number
 

@@ -32,7 +32,8 @@
  (#\9 . ce-command-number)
  ))
 
-(defvar buffer '("test" "buffer" "beep" "boop"))
+(defvar buffer nil)
+(defvar filename nil)
 
 ; newpoint values:
 ; 0 - reusing previous point
@@ -109,6 +110,26 @@
    (format t "~a," inpoint))
   (format t "~a~%" outpoint))
 
+(defun ce-command-open (c)
+  "open a file for editing"
+  (ce-reset-input)
+  (let ((name (read-line)))
+   (if (string= "" name)
+    (format t "?~%")
+    (progn
+      (setq filename name)
+      (setq buffer (uiop:read-file-lines filename))))))
+
+(defun ce-command-write (c)
+  "write a file to disk"
+  (ce-reset-input)
+  (let ((name (read-line)))
+   (with-open-file (out (if (string= "" name) filename name)
+			:direction :output
+			:if-exists :overwrite
+			:if-does-not-exist :create)
+    (format out "~{~a~%~}" buffer))))
+
 (defun ce-command-number (c)
   "input a number"
   (if (or (= 0 newpoint) (= 2 newpoint))
@@ -133,3 +154,4 @@ specific command. the recognized commands are as follows:
   (let ((mlen (list-length buffer)))
    (let ((in (mod inpoint mlen)) (out (+ 1 (mod outpoint mlen))))
     (format t "~{~a~%~}" (subseq buffer in out)))))
+
