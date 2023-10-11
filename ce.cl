@@ -110,6 +110,7 @@
    (format t "~a," inpoint))
   (format t "~a~%" outpoint))
 
+; TODO: needs error handling, and to be able to "open" nonexistant files
 (defun ce-command-open (c)
   "open a file for editing"
   (ce-reset-input)
@@ -119,22 +120,6 @@
     (progn
       (setq filename name)
       (setq buffer (uiop:read-file-lines filename))))))
-
-(defun ce-command-write (c)
-  "write a file to disk"
-  (ce-reset-input)
-  (let ((name (read-line)))
-   (with-open-file (out (if (string= "" name) filename name)
-			:direction :output
-			:if-exists :overwrite
-			:if-does-not-exist :create)
-    (format out "~{~a~%~}" buffer))))
-
-(defun ce-command-number (c)
-  "input a number"
-  (if (or (= 0 newpoint) (= 2 newpoint))
-   (progn (setq newpoint (+ 1 newpoint)) (setq outpoint 0)))
-  (setq outpoint (+ (* 10 outpoint) (digit-char-p c))))
 
 (defun ce-command-help (c)
   "get help for commoned commands"
@@ -154,4 +139,21 @@ specific command. the recognized commands are as follows:
   (let ((mlen (list-length buffer)))
    (let ((in (mod inpoint mlen)) (out (+ 1 (mod outpoint mlen))))
     (format t "~{~a~%~}" (subseq buffer in out)))))
+
+; TODO: needs error handling
+(defun ce-command-write (c)
+  "write a file to disk"
+  (ce-reset-input)
+  (let ((name (read-line)))
+   (with-open-file (out (if (string= "" name) filename name)
+			:direction :output
+			:if-exists :overwrite
+			:if-does-not-exist :create)
+    (format out "~{~a~%~}" buffer))))
+
+(defun ce-command-number (c)
+  "input a number"
+  (if (or (= 0 newpoint) (= 2 newpoint))
+   (progn (setq newpoint (+ 1 newpoint)) (setq outpoint 0)))
+  (setq outpoint (+ (* 10 outpoint) (digit-char-p c))))
 
