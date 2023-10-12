@@ -96,7 +96,7 @@
      (setq inpoint outpoint)))
    (ce-reset-input))
   (let ((out (mod outpoint (list-length buffer))))
-   (format t "~{~a~%~}" (subseq buffer out (1+ out)))))
+   (format t "~a~%" (car (nthcdr out buffer)))))
 
 (defun ce-command-eval (c)
   "evaluate a lisp expression"
