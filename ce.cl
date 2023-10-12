@@ -55,6 +55,19 @@
   "return nil if numeric or newline"
   (not (or (digit-char-p c) (char= #\Newline c))))
 
+(defun ce-push-line (index line)
+  "push a line into the buffer at index"
+  (if (= 0 index) ; index 0 is special as buffer is a singly linked list
+   (setq buffer (cons line buffer))
+   (push line (cdr (nthcdr (1- index) buffer)))))
+
+(defun ce-push-lines (index lines)
+  "push lines into the buffer at index"
+  (if lines
+   (progn
+    (ce-insert-line index (car lines))
+    (ce-insert-lines (1+ index) (cdr lines)))))
+
 (defun ce-reset-input ()
   "fix point to allow inputting new numbers,
   should be called at the beginning of most commands"
@@ -74,16 +87,16 @@
 (defun ce-command-enter (c)
   "process newlines if not eaten by another command"
   (if (= 0 newpoint)
-   (if (>= (+ 1 outpoint) (list-length buffer))
+   (if (>= (1+ outpoint) (list-length buffer))
     (progn
      (format t "?~%")
      (return-from ce-command-enter))
     (progn
-     (setq outpoint (+ 1 outpoint))
+     (setq outpoint (1+ outpoint))
      (setq inpoint outpoint)))
    (ce-reset-input))
   (let ((out (mod outpoint (list-length buffer))))
-   (format t "~{~a~%~}" (subseq buffer out (+ 1 out)))))
+   (format t "~{~a~%~}" (subseq buffer out (1+ out)))))
 
 (defun ce-command-eval (c)
   "evaluate a lisp expression"
@@ -95,7 +108,7 @@
   (ce-reset-input)
   (read-line)
   (let ((mlen (list-length buffer)))
-   (let ((in (mod inpoint mlen)) (out (+ 1 (mod outpoint mlen))))
+   (let ((in (mod inpoint mlen)) (out (1+ (mod outpoint mlen))))
     (format t "~a~%" (eval (read-from-string
      (format nil "~{~a~%~}" (subseq buffer in out))))))))
 
@@ -147,7 +160,7 @@ specific command. the recognized commands are as follows:
   (ce-reset-input)
   (read-line)
   (let ((mlen (list-length buffer)))
-   (let ((in (mod inpoint mlen)) (out (+ 1 (mod outpoint mlen))))
+   (let ((in (mod inpoint mlen)) (out (1+ (mod outpoint mlen))))
     (format t "~{~a~%~}" (subseq buffer in out)))))
 
 ; TODO: needs error handling
@@ -164,6 +177,6 @@ specific command. the recognized commands are as follows:
 (defun ce-command-number (c)
   "input a number"
   (if (or (= 0 newpoint) (= 2 newpoint))
-   (progn (setq newpoint (+ 1 newpoint)) (setq outpoint 0)))
+   (progn (setq newpoint (1+ newpoint)) (setq outpoint 0)))
   (setq outpoint (+ (* 10 outpoint) (digit-char-p c))))
 
