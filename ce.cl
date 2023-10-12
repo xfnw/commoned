@@ -10,8 +10,8 @@
  (#\? . ce-command-search-backwards)
  (#\= . ce-command-get-point)
  (#\a . ce-command-add)
- (#\B . ce-command-open)
  (#\c . ce-command-line-replace)
+ (#\e . ce-command-open)
  (#\h . ce-command-help)
  (#\i . ce-command-insert)
  (#\I . ce-command-insert-beg)
@@ -88,6 +88,15 @@
   "evaluate a lisp expression"
   (ce-reset-input)
   (format t "~a~%" (eval (read))))
+
+(defun ce-command-eval-region (c)
+  "evaluate a region"
+  (ce-reset-input)
+  (read-line)
+  (let ((mlen (list-length buffer)))
+   (let ((in (mod inpoint mlen)) (out (+ 1 (mod outpoint mlen))))
+    (format t "~a~%" (eval (read-from-string
+     (format nil "~{~a~%~}" (subseq buffer in out))))))))
 
 (defun ce-command-swap-point (c)
   "set the inpoint to recent outpoint or beginning, outpoint to eof
