@@ -65,8 +65,8 @@
   "push lines into the buffer at index"
   (if lines
    (progn
-    (ce-insert-line index (car lines))
-    (ce-insert-lines (1+ index) (cdr lines)))))
+    (ce-push-line index (car lines))
+    (ce-push-lines (1+ index) (cdr lines)))))
 
 (defun ce-reset-input ()
   "fix point to allow inputting new numbers,
@@ -132,6 +132,36 @@
   (if (not (= inpoint outpoint))
    (format t "~a," inpoint))
   (format t "~a~%" outpoint))
+
+(defun ce-add-til-dot (index lines)
+  "read input until dot, add to buffer"
+  (let ((line (read-line)))
+   (if (string= "." line)
+    (progn
+     (setq inpoint index)
+     (setq outpoint (+ index (1- (list-length lines))))
+     (ce-push-lines index (reverse lines)))
+    (ce-add-til-dot index (cons line lines)))))
+
+(defun ce-common-add (index)
+  "common parts of ce-command-add and ce-command-add-before"
+  (let ((line (read-line)))
+   (if (string= "" line)
+    (ce-add-til-dot index nil)
+    (progn
+     (setq inpoint index)
+     (setq outpoint index)
+     (ce-push-line index line)))))
+
+(defun ce-command-add (c)
+  "add lines after point"
+  (ce-reset-input)
+  (ce-common-add (1+ (mod outpoint (list-length buffer)))))
+
+(defun ce-command-add-before (c)
+  "add lines before point"
+  (ce-reset-input)
+  (ce-common-add (mod inpoint (list-length buffer))))
 
 ; TODO: needs error handling, and to be able to "open" nonexistant files
 (defun ce-command-open (c)

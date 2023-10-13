@@ -10,8 +10,8 @@ ed but lisp, and with some weird opinionated changes
 - [ ] / - ce-command-search
 - [ ] ? - ce-command-search-backwards
 - [x] = - ce-command-get-point
-- [ ] a - ce-command-add
-- [ ] A - ce-command-add-before
+- [x] a - ce-command-add
+- [x] A - ce-command-add-before
 - [ ] c - ce-command-line-replace
 - [x] e - ce-command-open
 - [x] h - ce-command-help
