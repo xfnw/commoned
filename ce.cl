@@ -55,6 +55,10 @@
   "return nil if numeric or newline"
   (not (or (digit-char-p c) (char= #\Newline c))))
 
+(defun ce-mod (num div)
+  "modulus but handle zero"
+  (if (= 0 div) 0 (mod num div)))
+
 (defun ce-push-line (index line)
   "push a line into the buffer at index"
   (if (= 0 index) ; index 0 is special as buffer is a singly linked list
@@ -95,7 +99,7 @@
      (setq outpoint (1+ outpoint))
      (setq inpoint outpoint)))
    (ce-reset-input))
-  (let ((out (mod outpoint (list-length buffer))))
+  (let ((out (ce-mod outpoint (list-length buffer))))
    (format t "~a~%" (car (nthcdr out buffer)))))
 
 (defun ce-command-eval (c)
@@ -108,7 +112,7 @@
   (ce-reset-input)
   (read-line)
   (let ((mlen (list-length buffer)))
-   (let ((in (mod inpoint mlen)) (out (1+ (mod outpoint mlen))))
+   (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
     (format t "~a~%" (eval (read-from-string
      (format nil "~{~a~%~}" (subseq buffer in out))))))))
 
@@ -156,12 +160,14 @@
 (defun ce-command-add (c)
   "add lines after point"
   (ce-reset-input)
-  (ce-common-add (1+ (mod outpoint (list-length buffer)))))
+  (if buffer
+   (ce-common-add (1+ (ce-mod outpoint (list-length buffer))))
+   (ce-common-add 0)))
 
 (defun ce-command-add-before (c)
   "add lines before point"
   (ce-reset-input)
-  (ce-common-add (mod inpoint (list-length buffer))))
+  (ce-common-add (ce-mod inpoint (list-length buffer))))
 
 ; TODO: needs error handling, and to be able to "open" nonexistant files
 (defun ce-command-open (c)
@@ -190,7 +196,7 @@ specific command. the recognized commands are as follows:
   (ce-reset-input)
   (read-line)
   (let ((mlen (list-length buffer)))
-   (let ((in (mod inpoint mlen)) (out (1+ (mod outpoint mlen))))
+   (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
     (format t "~{~a~%~}" (subseq buffer in out)))))
 
 ; TODO: needs error handling
