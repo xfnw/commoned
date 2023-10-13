@@ -210,8 +210,10 @@ specific command. the recognized commands are as follows:
   (ce-reset-input)
   (read-line)
   (let ((mlen (list-length buffer)))
-   (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
-    (format t "~{~a~%~}" (subseq buffer in out)))))
+   (if (not (= 0 mlen))
+    (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
+     (format t "~{~a~%~}" (subseq buffer in out)))
+    (format t "?~%"))))
 
 ; TODO: needs error handling
 (defun ce-command-write (c)
