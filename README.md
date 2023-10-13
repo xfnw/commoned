@@ -13,6 +13,7 @@ ed but lisp, and with some weird opinionated changes
 - [x] a - ce-command-add
 - [x] A - ce-command-add-before
 - [ ] c - ce-command-line-replace
+- [x] d - ce-command-delete
 - [x] e - ce-command-open
 - [x] h - ce-command-help
 - [ ] i - ce-command-insert

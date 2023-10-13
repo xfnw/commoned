@@ -12,6 +12,7 @@
  (#\a . ce-command-add)
  (#\A . ce-command-add-before)
  (#\c . ce-command-line-replace)
+ (#\d . ce-command-delete)
  (#\e . ce-command-open)
  (#\h . ce-command-help)
  (#\i . ce-command-insert)
@@ -71,6 +72,12 @@
    (progn
     (ce-push-line index (car lines))
     (ce-push-lines (1+ index) (cdr lines)))))
+
+(defun ce-delete (in out)
+  "delete a range of lines"
+  (setq buffer (nconc
+   (subseq buffer 0 in)
+   (nthcdr (1+ out) buffer))))
 
 (defun ce-reset-input ()
   "fix point to allow inputting new numbers,
@@ -168,6 +175,13 @@
   "add lines before point"
   (ce-reset-input)
   (ce-common-add (ce-mod inpoint (list-length buffer))))
+
+(defun ce-command-delete (c)
+  "delete the region"
+  (ce-reset-input)
+  (read-line)
+  (let ((mlen (list-length buffer)))
+   (ce-delete (ce-mod inpoint mlen) (ce-mod outpoint mlen))))
 
 ; TODO: needs error handling, and to be able to "open" nonexistant files
 (defun ce-command-open (c)
