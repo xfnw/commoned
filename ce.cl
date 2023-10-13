@@ -181,7 +181,17 @@
   (ce-reset-input)
   (read-line)
   (let ((mlen (list-length buffer)))
-   (ce-delete (ce-mod inpoint mlen) (ce-mod outpoint mlen))))
+   (ce-delete (ce-mod inpoint mlen) (ce-mod outpoint mlen))
+   (setq outpoint inpoint)))
+
+(defun ce-command-line-replace (c)
+  "replace the region"
+  (ce-reset-input)
+  (let ((mlen (list-length buffer)))
+   (let ((in (ce-mod inpoint mlen)) (out (ce-mod outpoint mlen)))
+    (ce-delete in out)
+    (ce-common-add in))))
+
 
 ; TODO: needs error handling, and to be able to "open" nonexistant files
 (defun ce-command-open (c)
