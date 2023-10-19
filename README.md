@@ -1,7 +1,17 @@
 # commoned
 ed but lisp, and with some weird opinionated changes
 
-## commands
+## building
+a standalone `ce` executable may be built using [embeddable common
+lisp](https://ecl.common-lisp.dev/) with the following command:
+```sh
+ecl --load build.cl --eval '(quit)'
+```
+note that the result will be dynamically linked to ecl by default, the
+`--disable-shared` configure flag when building ecl may change this
+
+## are we an editor yet?
+implementation status of planned commands:
 - [x] q - quit
 - [x] \n - ce-command-enter
 - [x] : - ce-command-eval
