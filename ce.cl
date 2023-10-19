@@ -95,6 +95,12 @@
       (funcall cmd input)
       (progn (read-line) (setq newpoint 0) (format t "?~%")))))))
 
+(defun ce-main ()
+  "initalize commoned from bin"
+  ; TODO: parse arguments to open a file
+  (ce-repl)
+  (ext:quit 0))
+
 (defun ce-command-enter (c)
   "process newlines if not eaten by another command"
   (if (= 0 newpoint)
@@ -191,7 +197,6 @@
    (let ((in (ce-mod inpoint mlen)) (out (ce-mod outpoint mlen)))
     (ce-delete in out)
     (ce-common-add in))))
-
 
 ; TODO: needs error handling, and to be able to "open" nonexistant files
 (defun ce-command-open (c)
