@@ -18,5 +18,3 @@
 		 :epilogue-code '(ce-main)
 		 :move-here "./")
 
-(format t "done building~%")
-
