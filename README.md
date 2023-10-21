@@ -1,5 +1,5 @@
 # commoned
-ed but lisp, and with some weird opinionated changes
+ed but lisp, and with many weird opinionated changes
 
 ## building
 a standalone `ce` executable may be built using [embeddable common
@@ -10,8 +10,8 @@ ecl --load build.cl --eval '(quit)'
 note that the result will be dynamically linked to ecl by default, the
 `--disable-shared` configure flag when building ecl may change this
 
-## are we an editor yet?
-implementation status of planned commands:
+## are we editing yet?
+implementation status of planned features:
 - [x] q - quit
 - [x] \n - ce-command-enter
 - [x] : - ce-command-eval
