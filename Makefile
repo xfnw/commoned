@@ -12,6 +12,8 @@ install: all
 uninstall:
 	rm -f ${DESTDIR}${BINDIR}/ce
 
+# warning: clean does not actually set up for a clean build,
+# ecl annoyingly hides build artifacts in its secret cache folder
 clean:
 	rm -f ce ce.fasb
 
