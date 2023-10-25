@@ -101,7 +101,7 @@
   (ce-repl)
   (ext:quit 0))
 
-(defun ce-command-enter (c)
+(defun ce-command-enter (&optional c)
   "process newlines if not eaten by another command"
   (if (= 0 newpoint)
    (if (>= (1+ outpoint) (list-length buffer))
@@ -115,12 +115,12 @@
   (let ((out (ce-mod outpoint (list-length buffer))))
    (format t "~a~%" (car (nthcdr out buffer)))))
 
-(defun ce-command-eval (c)
+(defun ce-command-eval (&optional c)
   "evaluate a lisp expression"
   (ce-reset-input)
   (format t "~a~%" (eval (read))))
 
-(defun ce-command-eval-region (c)
+(defun ce-command-eval-region (&optional c)
   "evaluate a region"
   (ce-reset-input)
   (read-line)
@@ -129,7 +129,7 @@
     (format t "~a~%" (eval (read-from-string
      (format nil "~{~a~%~}" (subseq buffer in out))))))))
 
-(defun ce-command-swap-point (c)
+(defun ce-command-swap-point (&optional c)
   "set the inpoint to recent outpoint or beginning, outpoint to eof
 
   for example:
@@ -142,7 +142,7 @@
   (setq outpoint -1)
   (setq newpoint 2))
 
-(defun ce-command-get-point (c)
+(defun ce-command-get-point (&optional c)
   "print the point"
   (ce-reset-input)
   (read-line)
@@ -170,19 +170,19 @@
      (setq outpoint index)
      (ce-push-line index line)))))
 
-(defun ce-command-add (c)
+(defun ce-command-add (&optional c)
   "add lines after point"
   (ce-reset-input)
   (if buffer
    (ce-common-add (1+ (ce-mod outpoint (list-length buffer))))
    (ce-common-add 0)))
 
-(defun ce-command-add-before (c)
+(defun ce-command-add-before (&optional c)
   "add lines before point"
   (ce-reset-input)
   (ce-common-add (ce-mod inpoint (list-length buffer))))
 
-(defun ce-command-delete (c)
+(defun ce-command-delete (&optional c)
   "delete the region"
   (ce-reset-input)
   (read-line)
@@ -190,7 +190,7 @@
    (ce-delete (ce-mod inpoint mlen) (ce-mod outpoint mlen))
    (setq outpoint inpoint)))
 
-(defun ce-command-line-replace (c)
+(defun ce-command-line-replace (&optional c)
   "replace the region"
   (ce-reset-input)
   (let ((mlen (list-length buffer)))
@@ -199,7 +199,7 @@
     (ce-common-add in))))
 
 ; TODO: needs error handling, and to be able to "open" nonexistant files
-(defun ce-command-open (c)
+(defun ce-command-open (&optional c)
   "open a file for editing"
   (ce-reset-input)
   (let ((name (read-line)))
@@ -209,7 +209,7 @@
       (setq filename name)
       (setq buffer (uiop:read-file-lines filename))))))
 
-(defun ce-command-help (c)
+(defun ce-command-help (&optional c)
   "get help for commoned commands"
   (ce-reset-input)
   (let ((key (read-char)))
@@ -220,7 +220,7 @@ specific command. the recognized commands are as follows:
     (progn (read-line) (help (cdr (assoc key ce-commands-alist))))))
   (format t "~%"))
 
-(defun ce-command-print (c)
+(defun ce-command-print (&optional c)
   "print a region"
   (ce-reset-input)
   (read-line)
@@ -231,7 +231,7 @@ specific command. the recognized commands are as follows:
     (format t "?~%"))))
 
 ; TODO: needs error handling
-(defun ce-command-write (c)
+(defun ce-command-write (&optional c)
   "write a file to disk"
   (ce-reset-input)
   (let ((name (read-line)))
