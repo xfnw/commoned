@@ -3,7 +3,7 @@ BINDIR ?= ${PREFIX}/bin
 
 all: ce
 
-ce:
+ce: ce.cl ce.asd build.cl
 	ecl --load build.cl --eval '(quit)'
 
 install: all
