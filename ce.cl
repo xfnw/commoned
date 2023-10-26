@@ -109,6 +109,7 @@
 
 (defun ce-command-enter (&optional c)
   "process newlines if not eaten by another command"
+  (declare (ignore c))
   (if (= 0 newpoint)
    (if (>= (1+ outpoint) (list-length buffer))
     (progn
@@ -123,11 +124,13 @@
 
 (defun ce-command-eval (&optional c)
   "evaluate a lisp expression"
+  (declare (ignore c))
   (ce-reset-input)
   (format t "~a~%" (eval (read))))
 
 (defun ce-command-eval-region (&optional c)
   "evaluate first expression in region"
+  (declare (ignore c))
   (ce-reset-input)
   (read-line)
   (let ((mlen (list-length buffer)))
@@ -147,6 +150,7 @@
 
 (defun ce-command-expand-before (&optional c)
   "decrement inpoint until line matches argument"
+  (declare (ignore c))
   (ce-reset-input)
   (let ((match (read-line)) (len (list-length buffer)))
    (let ((off (if (string= "" match) -1 0)))
@@ -156,6 +160,7 @@
 
 (defun ce-command-expand (&optional c)
   "increment outpoint until line matches argument"
+  (declare (ignore c))
   (ce-reset-input)
   (let ((match (read-line)) (len (list-length buffer)))
    (setq
@@ -164,6 +169,7 @@
 
 (defun ce-command-get-point (&optional c)
   "print the point"
+  (declare (ignore c))
   (ce-reset-input)
   (read-line)
   (if (not (= inpoint outpoint))
@@ -177,6 +183,7 @@
   3,5 selects lines 3 through 5 (inclusive)
   ,5  selects from the beginning of the document through line 5
   4,  selects from line 4 to the end of the document"
+  (declare (ignore c))
   (if (= 0 newpoint)
    (setq inpoint 0)
    (setq inpoint outpoint))
@@ -205,6 +212,7 @@
 
 (defun ce-command-add (&optional c)
   "add lines after point"
+  (declare (ignore c))
   (ce-reset-input)
   (if buffer
    (ce-common-add (1+ (ce-mod outpoint (list-length buffer))))
@@ -212,11 +220,13 @@
 
 (defun ce-command-add-before (&optional c)
   "add lines before point"
+  (declare (ignore c))
   (ce-reset-input)
   (ce-common-add (ce-mod inpoint (list-length buffer))))
 
 (defun ce-command-delete (&optional c)
   "delete the region"
+  (declare (ignore c))
   (ce-reset-input)
   (read-line)
   (let ((mlen (list-length buffer)))
@@ -225,6 +235,7 @@
 
 (defun ce-command-line-replace (&optional c)
   "replace the region"
+  (declare (ignore c))
   (ce-reset-input)
   (let ((mlen (list-length buffer)))
    (let ((in (ce-mod inpoint mlen)) (out (ce-mod outpoint mlen)))
@@ -241,6 +252,7 @@
 
 (defun ce-command-open (&optional c)
   "open a file for editing"
+  (declare (ignore c))
   (ce-reset-input)
   (let ((name (read-line)))
    (if (string= "" name)
@@ -249,6 +261,7 @@
 
 (defun ce-command-help (&optional c)
   "get help for commoned commands"
+  (declare (ignore c))
   (ce-reset-input)
   (let ((key (read-char)))
    (if (char= #\Newline key)
@@ -260,6 +273,7 @@ specific command. the recognized commands are as follows:
 
 (defun ce-command-print (&optional c)
   "print a region"
+  (declare (ignore c))
   (ce-reset-input)
   (read-line)
   (let ((mlen (list-length buffer)))
@@ -271,6 +285,7 @@ specific command. the recognized commands are as follows:
 ; TODO: needs error handling
 (defun ce-command-write (&optional c)
   "write a file to disk"
+  (declare (ignore c))
   (ce-reset-input)
   (let ((name (read-line)))
    (with-open-file (out (if (string= "" name) filename name)
