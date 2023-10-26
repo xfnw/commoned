@@ -172,9 +172,10 @@
   (declare (ignore c))
   (ce-reset-input)
   (read-line)
-  (if (not (= inpoint outpoint))
-   (format t "~a," inpoint))
-  (format t "~a ~a~%" outpoint filename))
+  (let ((len (list-length buffer)))
+   (if (not (= inpoint outpoint))
+    (format t "~a," (ce-mod inpoint len)))
+   (format t "~a ~a~%" (ce-mod outpoint len) filename)))
 
 (defun ce-command-swap-point (&optional c)
   "set the inpoint to recent outpoint or beginning, outpoint to eof
