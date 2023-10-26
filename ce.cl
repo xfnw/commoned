@@ -38,6 +38,7 @@
 
 (defvar buffer nil)
 (defvar filename nil)
+(defvar err nil)
 
 ; newpoint values:
 ; 0 - reusing previous point
@@ -98,7 +99,8 @@
    (let ((input (read-char)))
     (let ((cmd (cdr (assoc input ce-commands-alist))))
      (if cmd
-      (funcall cmd input)
+      (handler-case (funcall cmd input)
+       (error (e) (setq err e) (format t "?~%")))
       (progn (read-line) (setq newpoint 0) (format t "?~%")))))))
 
 (defun ce-main ()
@@ -255,7 +257,8 @@
   "function to open a file for editing"
   (setq filename name)
   (if (uiop:file-exists-p name)
-    (setq buffer (uiop:read-file-lines filename))
+   (handler-case (setq buffer (uiop:read-file-lines filename))
+    (error (e) (setq err e) (format t "?~%")))
    (format t "?~%")))
 
 (defun ce-command-open (&optional c)
