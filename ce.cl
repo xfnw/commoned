@@ -149,9 +149,10 @@
   "decrement inpoint until line matches argument"
   (ce-reset-input)
   (let ((match (read-line)) (len (list-length buffer)))
-   (setq
-    inpoint
-    (ce-walk-match -1 match (ce-mod inpoint len) 0 -1))))
+   (let ((off (if (string= "" match) -1 0)))
+    (setq
+     inpoint
+     (ce-walk-match -1 match (ce-mod inpoint len) 0 off)))))
 
 (defun ce-command-expand (&optional c)
   "increment outpoint until line matches argument"
