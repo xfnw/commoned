@@ -97,7 +97,11 @@
 
 (defun ce-main ()
   "initalize commoned from bin"
-  ; TODO: parse arguments to open a file
+  (let ((args (cdr (ext:command-args))))
+   (case (list-length args)
+    (0 ())
+    (1 (ce-open (car args)))
+    (otherwise (format t "?~%"))))
   (ce-repl)
   (ext:quit 0))
 
@@ -199,15 +203,18 @@
     (ce-common-add in))))
 
 ; TODO: needs error handling, and to be able to "open" nonexistant files
+(defun ce-open (name)
+  "function to open a file for editing"
+  (setq filename name)
+  (setq buffer (uiop:read-file-lines filename)))
+
 (defun ce-command-open (&optional c)
   "open a file for editing"
   (ce-reset-input)
   (let ((name (read-line)))
    (if (string= "" name)
     (format t "?~%")
-    (progn
-      (setq filename name)
-      (setq buffer (uiop:read-file-lines filename))))))
+    (ce-open name))))
 
 (defun ce-command-help (&optional c)
   "get help for commoned commands"
