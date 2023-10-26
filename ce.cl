@@ -152,7 +152,7 @@
   (read-line)
   (if (not (= inpoint outpoint))
    (format t "~a," inpoint))
-  (format t "~a~%" outpoint))
+  (format t "~a ~a~%" outpoint filename))
 
 (defun ce-add-til-dot (index lines)
   "read input until dot, add to buffer"
