@@ -127,13 +127,39 @@
   (format t "~a~%" (eval (read))))
 
 (defun ce-command-eval-region (&optional c)
-  "evaluate a region"
+  "evaluate first expression in region"
   (ce-reset-input)
   (read-line)
   (let ((mlen (list-length buffer)))
    (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
     (format t "~a~%" (eval (read-from-string
      (format nil "~{~a~%~}" (subseq buffer in out))))))))
+
+(defun ce-walk-match (dir match n stop &optional (offset 0))
+  "increment n in dir direction until line matches match
+  or n reaches stop"
+  (if (or (= n stop) (= (+ n offset) stop))
+   (progn (format t "?~%") stop)
+   (let ((nn (+ n dir)))
+    (if (string= match (nth (+ nn offset) buffer))
+     nn
+     (ce-walk-match dir match nn stop offset)))))
+
+(defun ce-command-expand-before (&optional c)
+  "decrement inpoint until line matches argument"
+  (ce-reset-input)
+  (let ((match (read-line)) (len (list-length buffer)))
+   (setq
+    inpoint
+    (ce-walk-match -1 match (ce-mod inpoint len) 0 -1))))
+
+(defun ce-command-expand (&optional c)
+  "increment outpoint until line matches argument"
+  (ce-reset-input)
+  (let ((match (read-line)) (len (list-length buffer)))
+   (setq
+    outpoint
+    (ce-walk-match 1 match (ce-mod outpoint len) (1- len)))))
 
 (defun ce-command-get-point (&optional c)
   "print the point"
