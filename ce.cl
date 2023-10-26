@@ -81,6 +81,10 @@
    (subseq buffer 0 in)
    (nthcdr (1+ out) buffer))))
 
+; TODO: possibly flatten the region here instead of nearly
+; every command needing ce-mod to get proper numbers?
+; commands that change number of lines would change
+; the region anyways
 (defun ce-reset-input ()
   "fix point to allow inputting new numbers,
   should be called at the beginning of most commands"
@@ -144,6 +148,9 @@
   (if (or (= n stop) (= (+ n offset) stop))
    (progn (format t "?~%") stop)
    (let ((nn (+ n dir)))
+    ; using nth like this is a bit silly and inefficent
+    ; when walking forwards, but we can then reuse the
+    ; function when walking backwards
     (if (string= match (nth (+ nn offset) buffer))
      nn
      (ce-walk-match dir match nn stop offset)))))
