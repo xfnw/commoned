@@ -202,11 +202,13 @@
     (ce-delete in out)
     (ce-common-add in))))
 
-; TODO: needs error handling, and to be able to "open" nonexistant files
+; TODO: needs error handling
 (defun ce-open (name)
   "function to open a file for editing"
   (setq filename name)
-  (setq buffer (uiop:read-file-lines filename)))
+  (if (uiop:file-exists-p name)
+    (setq buffer (uiop:read-file-lines filename))
+   (format t "?~%")))
 
 (defun ce-command-open (&optional c)
   "open a file for editing"
