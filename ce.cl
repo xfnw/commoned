@@ -5,10 +5,12 @@
  (#\Newline . ce-command-enter)
  (#\: . ce-command-eval)
  (#\; . ce-command-eval-region)
+ (#\{ . ce-command-expand-before)
+ (#\} . ce-command-expand)
+ (#\= . ce-command-get-point)
  (#\, . ce-command-swap-point)
  (#\/ . ce-command-search)
  (#\? . ce-command-search-backwards)
- (#\= . ce-command-get-point)
  (#\a . ce-command-add)
  (#\A . ce-command-add-before)
  (#\c . ce-command-line-replace)
@@ -133,6 +135,14 @@
     (format t "~a~%" (eval (read-from-string
      (format nil "~{~a~%~}" (subseq buffer in out))))))))
 
+(defun ce-command-get-point (&optional c)
+  "print the point"
+  (ce-reset-input)
+  (read-line)
+  (if (not (= inpoint outpoint))
+   (format t "~a," inpoint))
+  (format t "~a ~a~%" outpoint filename))
+
 (defun ce-command-swap-point (&optional c)
   "set the inpoint to recent outpoint or beginning, outpoint to eof
 
@@ -145,14 +155,6 @@
    (setq inpoint outpoint))
   (setq outpoint -1)
   (setq newpoint 2))
-
-(defun ce-command-get-point (&optional c)
-  "print the point"
-  (ce-reset-input)
-  (read-line)
-  (if (not (= inpoint outpoint))
-   (format t "~a," inpoint))
-  (format t "~a ~a~%" outpoint filename))
 
 (defun ce-add-til-dot (index lines)
   "read input until dot, add to buffer"

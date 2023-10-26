@@ -16,10 +16,12 @@ implementation status of planned features:
 - [x] \n - ce-command-enter
 - [x] : - ce-command-eval
 - [x] ; - ce-command-eval-region
+- [ ] { - ce-command-expand-before
+- [ ] } - ce-command-expand
+- [x] = - ce-command-get-point
 - [x] , - ce-command-swap-point
 - [ ] / - ce-command-search
 - [ ] ? - ce-command-search-backwards
-- [x] = - ce-command-get-point
 - [x] a - ce-command-add
 - [x] A - ce-command-add-before
 - [x] c - ce-command-line-replace
