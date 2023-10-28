@@ -1,5 +1,10 @@
 ; -*- lisp -*-
+
 (require :asdf)
+; pregexp seems to not have a provide, so we cannot require
+; instead try loading it if not already bundled in via asdf
+(when (not (boundp '*pregexp-version*))
+ (load "pregexp/pregexp.lisp"))
 
 (defvar ce-commands-alist '((#\q . quit)
  (#\Newline . ce-command-enter)

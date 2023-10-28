@@ -1,0 +1,3 @@
+[submodule "pregexp"]
+	path = pregexp
+	url = https://github.com/ds26gte/pregexp/
