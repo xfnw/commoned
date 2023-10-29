@@ -7,6 +7,10 @@ lisp](https://ecl.common-lisp.dev/) with the following command:
 ```sh
 ecl --load build.cl --eval '(quit)'
 ```
+
+on alpine, attempting to build without ecl-dev and gc-dev installed will
+result in strange and unintuitive error messages.
+
 note that the result will be dynamically linked to ecl by default, the
 `--disable-shared` configure flag when building ecl may change this
 
