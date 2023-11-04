@@ -170,8 +170,7 @@
    ; TODO: checking the same condition twice is silly,
    ; find a better way
    (let ((off (if (string= "" inp) -1 0))
-	 (match (if (string= "" inp)
-		  (pregexp "^[[:space:]]*$") (pregexp inp))))
+	 (match (pregexp (if (string= "" inp) "^[[:space:]]*$" inp))))
     (setq
      inpoint
      (ce-walk-match -1 match (ce-mod inpoint len) 0 off)))))
@@ -181,8 +180,7 @@
   (declare (ignore c))
   (ce-reset-input)
   (let ((inp (read-line)) (len (list-length buffer)))
-   (let ((match (if (string= "" inp)
-		  (pregexp "^[[:space:]]*$") (pregexp inp))))
+   (let ((match (pregexp (if (string= "" inp) "^[[:space:]]*$" inp))))
     (setq
      outpoint
      (ce-walk-match 1 match (ce-mod outpoint len) (1- len))))))
