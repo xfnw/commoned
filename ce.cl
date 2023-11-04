@@ -158,7 +158,7 @@
     ; using nth like this is a bit silly and inefficent
     ; when walking forwards, but we can then reuse the
     ; function when walking backwards
-    (if (string= match (nth (+ nn offset) buffer))
+    (if (pregexp-match-positions match (nth (+ nn offset) buffer))
      nn
      (ce-walk-match dir match nn stop offset)))))
 
@@ -166,8 +166,12 @@
   "decrement inpoint until line matches argument"
   (declare (ignore c))
   (ce-reset-input)
-  (let ((match (read-line)) (len (list-length buffer)))
-   (let ((off (if (string= "" match) -1 0)))
+  (let ((inp (read-line)) (len (list-length buffer)))
+   ; TODO: checking the same condition twice is silly,
+   ; find a better way
+   (let ((off (if (string= "" inp) -1 0))
+	 (match (if (string= "" inp)
+		  (pregexp "^[[:space:]]*$") (pregexp inp))))
     (setq
      inpoint
      (ce-walk-match -1 match (ce-mod inpoint len) 0 off)))))
@@ -176,10 +180,12 @@
   "increment outpoint until line matches argument"
   (declare (ignore c))
   (ce-reset-input)
-  (let ((match (read-line)) (len (list-length buffer)))
-   (setq
-    outpoint
-    (ce-walk-match 1 match (ce-mod outpoint len) (1- len)))))
+  (let ((inp (read-line)) (len (list-length buffer)))
+   (let ((match (if (string= "" inp)
+		  (pregexp "^[[:space:]]*$") (pregexp inp))))
+    (setq
+     outpoint
+     (ce-walk-match 1 match (ce-mod outpoint len) (1- len))))))
 
 (defun ce-command-get-point (&optional c)
   "print the point"
