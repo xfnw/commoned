@@ -24,8 +24,8 @@ implementation status of planned features:
 - [x] } - ce-command-expand
 - [x] = - ce-command-get-point
 - [x] , - ce-command-swap-point
-- [ ] / - ce-command-search
-- [ ] ? - ce-command-search-backwards
+- [x] / - ce-command-search
+- [x] ? - ce-command-search-before
 - [x] a - ce-command-add
 - [x] A - ce-command-add-before
 - [x] c - ce-command-line-replace

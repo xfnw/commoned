@@ -15,7 +15,7 @@
  (#\= . ce-command-get-point)
  (#\, . ce-command-swap-point)
  (#\/ . ce-command-search)
- (#\? . ce-command-search-backwards)
+ (#\? . ce-command-search-before)
  (#\a . ce-command-add)
  (#\A . ce-command-add-before)
  (#\c . ce-command-line-replace)
@@ -43,6 +43,7 @@
 
 (defvar buffer nil)
 (defvar filename nil)
+(defvar query nil)
 (defvar err nil)
 
 ; newpoint values:
@@ -208,6 +209,32 @@
    (setq inpoint outpoint))
   (setq outpoint -1)
   (setq newpoint 2))
+
+(defun ce-command-search (&optional c)
+  "set point at next line to match argument"
+  (declare (ignore c))
+  (ce-reset-input)
+  (let ((inp (read-line)) (len (list-length buffer)))
+   (let ((match
+	  (pregexp (if (string= "" inp) query (setq query inp)))))
+    (setq
+     outpoint
+     (ce-walk-match 1 match (ce-mod inpoint len) (1- len)))))
+  (setq inpoint outpoint)
+  (format t "~a~%" (car (nthcdr outpoint buffer))))
+
+(defun ce-command-search-before (&optional c)
+  "set point at previous line to match argument"
+  (declare (ignore c))
+  (ce-reset-input)
+  (let ((inp (read-line)) (len (list-length buffer)))
+   (let ((match
+	  (pregexp (if (string= "" inp) query (setq query inp)))))
+    (setq
+     inpoint
+     (ce-walk-match -1 match (ce-mod outpoint len) 0))))
+  (setq outpoint inpoint)
+  (format t "~a~%" (car (nthcdr outpoint buffer))))
 
 (defun ce-add-til-dot (index lines)
   "read input until dot, add to buffer"
