@@ -88,6 +88,22 @@
    (subseq buffer 0 in)
    (nthcdr (1+ out) buffer))))
 
+(defun ce-tokens (str tok &optional (len (length str))
+		  (sta 0) (cur 0) (bs nil) (out nil))
+  "tokenize of str at character tok. respects backslashes for escaping."
+  (if (< cur len)
+   (let ((c (char str cur)))
+    (if bs
+     ; there was previously a backslash, ignore this char
+     (ce-tokens str tok len sta (1+ cur) nil out)
+     (if (char= tok c)
+      (ce-tokens str tok len (1+ cur) (1+ cur) nil (cons
+       (subseq str sta cur) out))
+      (ce-tokens str tok len sta (1+ cur) (char= #\\ c) out))))
+   (reverse (if (= sta cur)
+	     out ; there was a trailing delimiter, ignore it
+	     (cons (subseq str sta cur) out)))))
+
 ; TODO: possibly flatten the region here instead of nearly
 ; every command needing ce-mod to get proper numbers?
 ; commands that change number of lines would change
