@@ -319,9 +319,8 @@
   (declare (ignore c))
   (ce-reset-input)
   (let ((name (read-line)))
-   (if (string= "" name)
-    (format t "?~%")
-    (ce-open name))))
+   (ce-open (if (string= "" name)
+	     filename name))))
 
 (defun ce-command-help (&optional c)
   "get help for commoned commands"
