@@ -88,21 +88,22 @@
    (subseq buffer 0 in)
    (nthcdr (1+ out) buffer))))
 
-(defun ce-tokens (str tok &optional (len (length str))
-		  (sta 0) (cur 0) (bs nil) (out nil))
+(defun ce-tokens (str tok &optional (len (length str)) (sta 0) (cur 0)
+		  (bs nil) (out nil) (rep (pregexp (pregexp-quote
+		   (format nil "\\~c" tok)))) (ins (format nil "~c" tok)))
   "tokenize of str at character tok. respects backslashes for escaping."
   (if (< cur len)
    (let ((c (char str cur)))
     (if bs
-     ; there was previously a backslash, ignore this char
-     (ce-tokens str tok len sta (1+ cur) nil out)
+     ; last char was a backslash, ignore this one
+     (ce-tokens str tok len sta (1+ cur) nil out rep ins)
      (if (char= tok c)
       (ce-tokens str tok len (1+ cur) (1+ cur) nil (cons
-       (subseq str sta cur) out))
-      (ce-tokens str tok len sta (1+ cur) (char= #\\ c) out))))
+       (pregexp-replace* rep (subseq str sta cur) ins) out) rep ins)
+      (ce-tokens str tok len sta (1+ cur) (char= #\\ c) out rep ins))))
    (reverse (if (= sta cur)
 	     out ; there was a trailing delimiter, ignore it
-	     (cons (subseq str sta cur) out)))))
+	     (cons (pregexp-replace* rep (subseq str sta cur) ins) out)))))
 
 ; TODO: possibly flatten the region here instead of nearly
 ; every command needing ce-mod to get proper numbers?
