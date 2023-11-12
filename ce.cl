@@ -348,20 +348,25 @@ specific command. the recognized commands are as follows:
     (format t "?~%"))))
 
 (defun ce-command-reg-replace (&optional c)
-  "do a sed-like replace"
+  "do a sed-like replacement"
   (declare (ignore c))
   (ce-reset-input)
   (let ((sep (read-char)))
    (if (char= #\Newline sep)
-    (if (or (not query) (not ins) (not sfl))
-     (format t "?~%"))
+    (when (or (not query) (not ins) (not sfl))
+     (format t "?~%")
+     (return-from ce-command-reg-replace))
     (let ((pat (ce-tokens (read-line) sep)))
      (setq query (car pat))
-     (setq ins (nth 1 pat))
-     (if (> (list-length pat) 2)
-      (setq sfl (nth 2 pat))
-      (setq sfl ""))))
-   ()))
+     (setq ins (or (nth 1 pat) ""))
+     (setq sfl (or (nth 2 pat) "")))))
+  (let ((mlen (list-length buffer)))
+   (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
+    (if (find #\g sfl)
+     (loop for lin in (nthcdr in buffer) and i from in repeat (- out in) do
+      (let ((res (pregexp-replace* query lin ins)))
+       (ce-delete i i)
+       (ce-push-line i res)))))))
 
 ; TODO: needs error handling
 (defun ce-command-write (&optional c)
