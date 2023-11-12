@@ -44,6 +44,8 @@
 (defvar buffer nil)
 (defvar filename nil)
 (defvar query nil)
+(defvar ins nil)
+(defvar sfl nil)
 (defvar err nil)
 
 ; newpoint values:
@@ -344,6 +346,22 @@ specific command. the recognized commands are as follows:
     (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
      (format t "~{~a~%~}" (subseq buffer in out)))
     (format t "?~%"))))
+
+(defun ce-command-reg-replace (&optional c)
+  "do a sed-like replace"
+  (declare (ignore c))
+  (ce-reset-input)
+  (let ((sep (read-char)))
+   (if (char= #\Newline sep)
+    (if (or (not query) (not ins) (not sfl))
+     (format t "?~%"))
+    (let ((pat (ce-tokens (read-line) sep)))
+     (setq query (car pat))
+     (setq ins (nth 1 pat))
+     (if (> (list-length pat) 2)
+      (setq sfl (nth 2 pat))
+      (setq sfl ""))))
+   ()))
 
 ; TODO: needs error handling
 (defun ce-command-write (&optional c)
