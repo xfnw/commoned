@@ -36,7 +36,7 @@ implementation status of planned features:
 - [ ] I - ce-command-insert-beg
 - [ ] m - ce-command-move
 - [x] p - ce-command-print
-- [ ] s - ce-command-reg-replace
+- [x] s - ce-command-reg-replace
 - [ ] t - ce-command-copy
 - [x] w - ce-command-write
 - [x] 0 - ce-command-number

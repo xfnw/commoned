@@ -366,7 +366,13 @@ specific command. the recognized commands are as follows:
      (loop for lin in (nthcdr in buffer) and i from in repeat (- out in) do
       (let ((res (pregexp-replace* query lin ins)))
        (ce-delete i i)
-       (ce-push-line i res)))))))
+       (ce-push-line i res)))
+     (loop for lin in (nthcdr in buffer) and i from in repeat (- out in) do
+      (let ((res (pregexp-replace query lin ins)))
+       (when (not (string= lin res))
+	(ce-delete i i)
+	(ce-push-line i res)
+	(return))))))))
 
 ; TODO: needs error handling
 (defun ce-command-write (&optional c)
