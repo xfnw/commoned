@@ -25,6 +25,7 @@
  (#\i . ce-command-insert)
  (#\I . ce-command-insert-beg)
  (#\m . ce-command-move)
+ (#\n . ce-command-num-print)
  (#\p . ce-command-print)
  (#\s . ce-command-reg-replace)
  (#\t . ce-command-copy)
@@ -335,6 +336,16 @@ specific command. the recognized commands are as follows:
 ~{~a~^ ~}" (remove-if-not 'not-num-new-p (mapcar 'car ce-commands-alist)))
     (progn (read-line) (help (cdr (assoc key ce-commands-alist))))))
   (format t "~%"))
+
+(defun ce-command-num-print (&optional c)
+  "print a region with line numbers"
+  (declare (ignore c))
+  (ce-reset-input)
+  (read-line)
+  (let ((mlen (list-length buffer)))
+   (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
+    (loop for lin in (nthcdr in buffer) and i from in repeat (- out in) do
+     (format t "~3d ~a~%" i lin)))))
 
 (defun ce-command-print (&optional c)
   "print a region"
