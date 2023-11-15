@@ -80,10 +80,9 @@
 
 (defun ce-push-lines (index lines)
   "push lines into the buffer at index"
-  (if lines
-   (progn
-    (ce-push-line index (car lines))
-    (ce-push-lines (1+ index) (cdr lines)))))
+  (setq buffer (nconc
+   (subseq buffer 0 index)
+   (nconc lines (nthcdr index buffer)))))
 
 (defun ce-delete (in out)
   "delete a range of lines"
