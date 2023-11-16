@@ -84,6 +84,12 @@
    (subseq buffer 0 index)
    (nconc lines (nthcdr index buffer)))))
 
+(defun ce-replace-lines (in out lines)
+  "replace a range of lines"
+  (setq buffer (nconc
+   (subseq buffer 0 in)
+   (nconc lines (nthcdr out buffer)))))
+
 (defun ce-delete (in out)
   "delete a range of lines"
   (setq buffer (nconc
@@ -335,6 +341,24 @@ specific command. the recognized commands are as follows:
 ~{~a~^ ~}" (remove-if-not 'not-num-new-p (mapcar 'car ce-commands-alist)))
     (progn (read-line) (help (cdr (assoc key ce-commands-alist))))))
   (format t "~%"))
+
+(defun ce-command-insert (&optional c)
+  "add to the end of each line in region"
+  (declare (ignore c))
+  (ce-reset-input)
+  (let ((inp (read-line)) (mlen (list-length buffer)))
+   (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
+    (let ((new (mapcar (lambda (x) (concat x inp)) (subseq buffer in out))))
+     (ce-replace-lines in out new)))))
+
+(defun ce-command-insert-beg (&optional c)
+  "add to the start of each line in region"
+  (declare (ignore c))
+  (ce-reset-input)
+  (let ((inp (read-line)) (mlen (list-length buffer)))
+   (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
+    (let ((new (mapcar (lambda (x) (concat inp x)) (subseq buffer in out))))
+     (ce-replace-lines in out new)))))
 
 (defun ce-command-num-print (&optional c)
   "print a region with line numbers"
