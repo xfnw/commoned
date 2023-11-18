@@ -48,6 +48,7 @@
 (defvar ins nil)
 (defvar sfl nil)
 (defvar err nil)
+(defvar errf "?~%")
 
 ; newpoint values:
 ; 0 - reusing previous point
@@ -131,8 +132,8 @@
     (let ((cmd (cdr (assoc input ce-commands-alist))))
      (if cmd
       (handler-case (funcall cmd input)
-       (error (e) (setq err e) (format t "?~%")))
-      (progn (read-line) (setq newpoint 0) (format t "?~%")))))))
+       (error (e) (setq err e) (format t errf)))
+      (progn (read-line) (setq newpoint 0) (format t errf)))))))
 
 (defun ce-main ()
   "initalize commoned from bin"
@@ -140,7 +141,7 @@
    (case (list-length args)
     (0 ())
     (1 (ce-open (car args)))
-    (otherwise (format t "?~%"))))
+    (otherwise (format t errf))))
   (ce-repl)
   (ext:quit 0))
 
@@ -150,7 +151,7 @@
   (if (= 0 newpoint)
    (if (>= (1+ outpoint) (list-length buffer))
     (progn
-     (format t "?~%")
+     (format t errf)
      (return-from ce-command-enter))
     (progn
      (setq outpoint (1+ outpoint))
@@ -179,7 +180,7 @@
   "increment n in dir direction until line matches match
   or n reaches stop"
   (if (or (= n stop) (= (+ n offset) stop))
-   (progn (format t "?~%") stop)
+   (progn (format t errf) stop)
    (let ((nn (+ n dir)))
     ; using nth like this is a bit silly and inefficent
     ; when walking forwards, but we can then reuse the
@@ -319,8 +320,8 @@
   (setq filename name)
   (if (uiop:file-exists-p name)
    (handler-case (setq buffer (uiop:read-file-lines filename))
-    (error (e) (setq err e) (format t "?~%")))
-   (format t "?~%")))
+    (error (e) (setq err e) (format t errf)))
+   (format t errf)))
 
 (defun ce-command-open (&optional c)
   "open a file for editing"
@@ -381,7 +382,7 @@ specific command. the recognized commands are as follows:
    (if (not (= 0 mlen))
     (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
      (format t "~{~a~%~}" (subseq buffer in out)))
-    (format t "?~%"))))
+    (format t errf))))
 
 (defun ce-command-reg-replace (&optional c)
   "do a sed-like replacement"
@@ -390,7 +391,7 @@ specific command. the recognized commands are as follows:
   (let ((sep (read-char)))
    (if (char= #\Newline sep)
     (when (or (not query) (not ins) (not sfl))
-     (format t "?~%")
+     (format t errf)
      (return-from ce-command-reg-replace))
     (let ((pat (ce-tokens (read-line) sep)))
      (setq query (car pat))
