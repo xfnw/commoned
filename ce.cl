@@ -69,9 +69,20 @@
   "return nil if numeric or newline"
   (not (or (digit-char-p c) (char= #\Newline c))))
 
+(defun string-or (a b)
+  "or but first being empty is equivalent to nil"
+  (or (if (string= "" a) nil a) b))
+
 (defun ce-mod (num div)
   "modulus but handle zero"
   (if (= 0 div) 0 (mod num div)))
+
+(defun ce-apply-region (fun)
+  "apply fun to each line of region"
+  (let ((mlen (list-length buffer)))
+   (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
+    (let ((new (mapcar fun (subseq buffer in out))))
+     (ce-replace-lines in out new)))))
 
 (defun ce-push-line (index line)
   "push a line into the buffer at index"
@@ -347,11 +358,8 @@ specific command. the recognized commands are as follows:
   "helper for insert and insert-beg"
   `(progn
     (ce-reset-input)
-    (let ((inp (read-line)) (mlen (list-length buffer)))
-     (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
-      (let ((new (mapcar (lambda (x) (concat ,a ,b))
-		  (subseq buffer in out))))
-       (ce-replace-lines in out new))))))
+    (let ((inp (read-line)))
+     (ce-apply-region (lambda (x) (concat ,a ,b))))))
 
 (defun ce-command-insert (&optional c)
   "add to the end of each line in region"
