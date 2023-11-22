@@ -30,6 +30,8 @@
  (#\s . ce-command-reg-replace)
  (#\t . ce-command-copy)
  (#\w . ce-command-write)
+ (#\x . ce-command-chop)
+ (#\X . ce-command-chop-beg)
  (#\0 . ce-command-number)
  (#\1 . ce-command-number)
  (#\2 . ce-command-number)
@@ -430,6 +432,26 @@ specific command. the recognized commands are as follows:
 			:if-exists :overwrite
 			:if-does-not-exist :create)
     (format out "~{~a~%~}" buffer))))
+
+(defmacro ce-build-chop (fin)
+  "helper for chop and chop-beg"
+  `(progn
+    (ce-reset-input)
+    (let ((inp (parse-integer (string-or (read-line) "1"))))
+     (ce-apply-region (lambda (x)
+		       (let ((llen (length x)))
+			(if (< llen inp)
+			 x ,fin)))))))
+
+(defun ce-command-chop (&optional c)
+  "chop off argument characters from end of each line in region"
+  (declare (ignore c))
+  (ce-build-chop (subseq x 0 (- llen inp))))
+
+(defun ce-command-chop-beg (&optional c)
+  "chop off argument characters from start of each line in region"
+  (declare (ignore c))
+  (ce-build-chop (subseq x inp)))
 
 (defun ce-command-number (c)
   "input a number"

@@ -40,5 +40,7 @@ implementation status of planned features:
 - [x] s - ce-command-reg-replace
 - [ ] t - ce-command-copy
 - [x] w - ce-command-write
+- [x] x - ce-command-chop
+- [x] X - ce-command-chop-beg
 - [x] 0 - ce-command-number
 
