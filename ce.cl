@@ -421,6 +421,20 @@ specific command. the recognized commands are as follows:
 	(ce-push-line i res)
 	(return))))))))
 
+(defun ce-command-copy (&optional c)
+  "copy the region to argument line"
+  (declare (ignore c))
+  (ce-reset-input)
+  (let ((mlen (list-length buffer)))
+   (let ((inp (1+ (ce-mod (parse-integer (read-line)) mlen)))
+	 (in (ce-mod inpoint mlen))
+	 (out (1+ (ce-mod outpoint mlen))))
+    (let ((copy (subseq buffer in out))
+	  (diff (1- (- out in))))
+     (ce-push-lines inp copy)
+     (setq inpoint inp)
+     (setq outpoint (+ inp diff))))))
+
 ; TODO: needs error handling
 (defun ce-command-write (&optional c)
   "write a file to disk"
