@@ -31,10 +31,13 @@ implementation status of planned features:
 - [x] c - ce-command-line-replace
 - [x] d - ce-command-delete
 - [x] e - ce-command-open
+- [ ] f - ce-command-fmt
+- [ ] g - ce-command-reg-apply
 - [x] h - ce-command-help
 - [x] i - ce-command-insert
 - [x] I - ce-command-insert-beg
-- [ ] m - ce-command-move
+- [ ] j - ce-command-join
+- [x] m - ce-command-copy (move)
 - [x] n - ce-command-num-print
 - [x] p - ce-command-print
 - [x] s - ce-command-reg-replace
