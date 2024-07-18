@@ -84,9 +84,13 @@
 
 (defun ce-apply-region (fun)
   "apply fun to each line of region"
+  (ce-pipe-region (lambda (x) (mapcar fun x))))
+
+(defun ce-pipe-region (fun)
+  "pipe region through function"
   (let ((mlen (list-length buffer)))
    (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
-    (let ((new (mapcar fun (subseq buffer in out))))
+    (let ((new (funcall fun (subseq buffer in out))))
      (ce-replace-lines in out new)))))
 
 (defun ce-push-line (index line)
@@ -375,6 +379,14 @@ specific command. the recognized commands are as follows:
   "add to the start of each line in region"
   (declare (ignore c))
   (ce-build-insert inp x))
+
+(defun ce-command-join (&optional c)
+  "join lines together, replacing newlines with spaces"
+  (declare (ignore c))
+  (ce-reset-input)
+  (read-line)
+  (ce-pipe-region
+   (lambda (x) (list (format nil "~{~a~^ ~}" x)))))
 
 (defun ce-command-num-print (&optional c)
   "print a region with line numbers"

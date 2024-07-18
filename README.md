@@ -36,7 +36,7 @@ implementation status of planned features:
 - [x] h - ce-command-help
 - [x] i - ce-command-insert
 - [x] I - ce-command-insert-beg
-- [ ] j - ce-command-join
+- [x] j - ce-command-join
 - [x] m - ce-command-copy (move)
 - [x] n - ce-command-num-print
 - [x] p - ce-command-print
