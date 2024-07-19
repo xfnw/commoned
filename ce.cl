@@ -90,6 +90,7 @@
   (let ((mlen (list-length buffer)))
    (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
     (let ((new (funcall fun (subseq buffer in out))))
+     (setq outpoint (+ in (1- (list-length new))))
      (ce-replace-lines in out new)))))
 
 (defun ce-push-line (index line)
@@ -349,6 +350,27 @@
   (let ((name (read-line)))
    (ce-open (if (string= "" name)
 	     filename name))))
+
+; FIXME: this is stupidly inefficent
+(defun ce-fold (col lins)
+  "fold lines"
+  (let ((o (list "")))
+   (loop for lin in lins do
+    (loop for w in (uiop:split-string lin) do
+     (if (< (+ (length w) (length (car o))) col)
+      (setf (car o) (if (string= "" (car o)) w
+       (format nil "~a ~a" (car o) w)))
+      (setq o (cons w o))))
+    (setq o (cons "" o)))
+   (reverse (cdr o))))
+
+(defun ce-command-fold (&optional c)
+  "fold lines in region to argument columns"
+  (declare (ignore c))
+  (ce-reset-input)
+  (let ((sw (read-line)))
+   (let ((w (if (string= "" sw) 70 (parse-integer sw))))
+    (ce-pipe-region (lambda (x) (ce-fold w x))))))
 
 (defun ce-command-help (&optional c)
   "get help for commoned commands"
