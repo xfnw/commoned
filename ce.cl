@@ -21,7 +21,7 @@
  (#\c . ce-command-line-replace)
  (#\d . ce-command-delete)
  (#\e . ce-command-open)
- (#\f . ce-command-fmt)
+ (#\f . ce-command-fold)
  (#\g . ce-command-reg-apply)
  (#\h . ce-command-help)
  (#\i . ce-command-insert)

@@ -31,7 +31,7 @@ implementation status of planned features:
 - [x] c - ce-command-line-replace
 - [x] d - ce-command-delete
 - [x] e - ce-command-open
-- [ ] f - ce-command-fmt
+- [ ] f - ce-command-fold
 - [ ] g - ce-command-reg-apply
 - [x] h - ce-command-help
 - [x] i - ce-command-insert
