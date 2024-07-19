@@ -458,7 +458,7 @@ specific command. the recognized commands are as follows:
 	(return))))))))
 
 (defun ce-command-copy (c)
-  "copy the region to argument line"
+  "copy or move the region to argument line"
   (ce-reset-input)
   (let ((mlen (list-length buffer)))
    (let ((inp (1+ (ce-mod (parse-integer (read-line)) mlen)))
