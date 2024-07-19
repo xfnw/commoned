@@ -22,7 +22,6 @@
  (#\d . ce-command-delete)
  (#\e . ce-command-open)
  (#\f . ce-command-fold)
- (#\g . ce-command-reg-apply)
  (#\h . ce-command-help)
  (#\i . ce-command-insert)
  (#\I . ce-command-insert-beg)

@@ -32,7 +32,6 @@ implementation status of planned features:
 - [x] d - ce-command-delete
 - [x] e - ce-command-open
 - [ ] f - ce-command-fold
-- [ ] g - ce-command-reg-apply
 - [x] h - ce-command-help
 - [x] i - ce-command-insert
 - [x] I - ce-command-insert-beg
