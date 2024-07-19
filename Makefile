@@ -3,6 +3,9 @@ BINDIR ?= ${PREFIX}/bin
 
 all: ce
 
+develop: ce.cl
+	ecl --load ce.cl --eval '(ce-repl)'
+
 ce: ce.cl ce.asd build.cl
 	ecl --load build.cl --eval '(quit)'
 
