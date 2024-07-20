@@ -8,7 +8,7 @@ lisp](https://ecl.common-lisp.dev/) with the following command:
 ecl --load build.cl --eval '(quit)'
 ```
 
-you'll need ecl with development bindings (probably called ecl-dev)
+you'll need ecl with development bindings (probably called ecl-dev).
 on alpine, make sure you also have libffi-dev gmp-dev and gc-dev
 installed, since the dependencies for alpine's ecl package seem
 to be missing stuff needed to build binaries.
