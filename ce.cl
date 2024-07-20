@@ -46,6 +46,12 @@
  (#\9 . ce-command-number)
  ))
 
+(defvar copying #.(format nil "commoned is licensed under the GPL, either version 3, or (at your
+option) any later version. see the LICENSE file for more info.
+
+commoned uses pregexp, which has the following license:
+~a" (uiop:read-file-string "pregexp/COPYING")))
+
 (defvar buffer nil)
 (defvar filename nil)
 (defvar query nil)

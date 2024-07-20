@@ -8,6 +8,7 @@
 (defsystem :ce
   :depends-on (#:asdf)
   :components
-  ((:clfile "ce" :depends-on ("pregexp/pregexp"))
+  ((:clfile "ce" :depends-on ("pregexp/pregexp" "pregexp/COPYING"))
+   (:static-file "pregexp/COPYING")
    (:file "pregexp/pregexp")))
 
