@@ -7,7 +7,7 @@ develop: ce.cl
 	ecl --load ce.cl --eval '(ce-repl)'
 
 ce: ce.cl ce.asd build.cl
-	ecl --load build.cl --eval '(quit)'
+	ecl --shell build.cl
 
 install: all
 	install ce ${DESTDIR}${BINDIR}
