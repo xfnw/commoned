@@ -193,14 +193,18 @@ commoned uses pregexp, which has the following license:
   (format t "~a~%" (eval (read))))
 
 (defun ce-command-eval-region (&optional c)
-  "evaluate first expression in region"
+  "evaluate contents of region"
   (declare (ignore c))
   (ce-reset-input)
   (read-line)
   (let ((mlen (list-length buffer)))
    (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
-    (format t "~a~%" (eval (read-from-string
-     (format nil "~{~a~%~}" (subseq buffer in out))))))))
+    (let ((stream (make-string-input-stream
+		   (format nil "~{~a~%~}" (subseq buffer in out)))))
+     (format t "~a~%" (loop
+		       for f = (read stream nil)
+		       while f for r = (eval f)
+		       finally (return r)))))))
 
 (defun ce-walk-match (dir match n stop &optional (offset 0))
   "increment n in dir direction until line matches match
