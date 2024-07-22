@@ -391,7 +391,8 @@ commoned uses pregexp, which has the following license:
     (format t "Welcome to commoned. try h<letter> to get help for a
 specific command. the recognized commands are as follows:
 ~{~a~^ ~}" (remove-if-not 'not-num-new-p (mapcar 'car ce-commands-alist)))
-    (progn (read-line) (help (cdr (assoc key ce-commands-alist))))))
+    (progn (read-line) (format t "~a"
+     (documentation (cdr (assoc key ce-commands-alist)) 'function)))))
   (format t "~%"))
 
 (defmacro ce-build-insert (a b)
