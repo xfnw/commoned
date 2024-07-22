@@ -6,7 +6,7 @@
 (when (not (boundp '*pregexp-version*))
  (load "pregexp/pregexp.lisp"))
 
-(defvar ce-commands-alist '((#\q . quit)
+(defvar ce-commands-alist '(
  (#\Newline . ce-command-enter)
  (#\: . ce-command-eval)
  (#\; . ce-command-eval-region)
@@ -29,6 +29,7 @@
  (#\m . ce-command-copy)
  (#\n . ce-command-num-print)
  (#\p . ce-command-print)
+ (#\q . ce-command-quit)
  (#\s . ce-command-reg-replace)
  (#\t . ce-command-copy)
  (#\w . ce-command-write)
@@ -440,6 +441,13 @@ specific command. the recognized commands are as follows:
     (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
      (format t "~{~a~%~}" (subseq buffer in out)))
     (format t errf))))
+
+(defun ce-command-quit (&optional c)
+  "quit without saving"
+  (declare (ignore c))
+  (ce-reset-input)
+  (read-line)
+  (quit))
 
 (defun ce-command-reg-replace (&optional c)
   "do a sed-like replacement"
