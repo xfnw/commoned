@@ -152,6 +152,14 @@ commoned uses pregexp, which has the following license:
    (setq inpoint outpoint))
   (setq newpoint 0))
 
+(defun ce-load-init ()
+  "load init file if exists"
+  (let ((initpath (concat
+		   (or (uiop:getenv "XDG_CONFIG_DIR") "~/.config")
+		   "/commoned/init.cl")))
+   (when (uiop:file-exists-p initpath)
+    (load initpath))))
+
 (defun ce-repl ()
   "parse commands from stdin"
   (loop
@@ -164,6 +172,7 @@ commoned uses pregexp, which has the following license:
 
 (defun ce-main ()
   "initalize commoned from bin"
+  (ce-load-init)
   (let ((args (cdr (ext:command-args))))
    (case (list-length args)
     (0 ())
