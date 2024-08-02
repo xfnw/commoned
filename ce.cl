@@ -103,7 +103,7 @@ commoned uses pregexp, which has the following license:
 (defun ce-push-line (index line)
   "push a line into the buffer at index"
   (if (= 0 index) ; index 0 is special as buffer is a singly linked list
-   (setq buffer (cons line buffer))
+   (push line buffer)
    (push line (cdr (nthcdr (1- index) buffer)))))
 
 (defun ce-push-lines (index lines)
@@ -380,8 +380,8 @@ commoned uses pregexp, which has the following license:
      (if (< (+ (length w) (length (car o))) col)
       (setf (car o) (if (string= "" (car o)) w
        (format nil "~a ~a" (car o) w)))
-      (setq o (cons w o))))
-    (setq o (cons "" o)))
+      (push w o)))
+    (push "" o))
    (reverse (cdr o))))
 
 (defun ce-command-fold (&optional c)
