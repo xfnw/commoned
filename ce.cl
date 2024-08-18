@@ -26,6 +26,7 @@
  (#\i . ce-command-insert)
  (#\I . ce-command-insert-beg)
  (#\j . ce-command-join)
+ (#\J . ce-command-join)
  (#\m . ce-command-copy)
  (#\n . ce-command-num-print)
  (#\p . ce-command-print)
@@ -423,13 +424,14 @@ specific command. the recognized commands are as follows:
   (declare (ignore c))
   (ce-build-insert inp x))
 
-(defun ce-command-join (&optional c)
-  "join lines together, replacing newlines with spaces"
-  (declare (ignore c))
+(defun ce-command-join (c)
+  "join lines together, replacing newlines with spaces when lowercase j"
   (ce-reset-input)
   (read-line)
   (ce-pipe-region
-   (lambda (x) (list (format nil "~{~a~^ ~}" x)))))
+   (if (char= #\j c)
+    (lambda (x) (list (format nil "~{~a~^ ~}" x)))
+    (lambda (x) (list (format nil "~{~a~}" x))))))
 
 (defun ce-command-num-print (&optional c)
   "print a region with line numbers"
