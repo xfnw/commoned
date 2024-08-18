@@ -31,6 +31,7 @@
  (#\p . ce-command-print)
  (#\q . ce-command-quit)
  (#\s . ce-command-reg-replace)
+ (#\S . ce-command-split)
  (#\t . ce-command-copy)
  (#\w . ce-command-write)
  (#\x . ce-command-chop)
@@ -484,6 +485,33 @@ specific command. the recognized commands are as follows:
 	(ce-delete i i)
 	(ce-push-line i res)
 	(return))))))))
+
+(defun ce-command-split (&optional c)
+  "split a line at regex"
+  (declare (ignore c))
+  (ce-reset-input)
+  (let ((sep (read-char)))
+   (if (char= #\Newline sep)
+    (when (or (not query) (not sfl))
+     (format t errf)
+     (return-from ce-command-split))
+    (let ((pat (ce-tokens (read-line) sep)))
+     (setq query (car pat))
+     (setq sfl (or (nth 1 pat) "")))))
+  (let ((mlen (list-length buffer)))
+   (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen
+))))
+    (loop for lin in (nthcdr in buffer) and i from in repeat (- out in) do
+     (let ((res (car (pregexp-match-positions query lin))))
+      (when res
+       (let ((sl (if (find #\e sfl) (cdr res) (car res))))
+	(ce-delete i i)
+	(ce-push-line i (subseq lin sl))
+	(ce-push-line i (subseq lin 0 sl))
+	(setq inpoint i)
+	(setq outpoint (1+ i))
+	(return))))
+  ))))
 
 (defun ce-command-copy (c)
   "copy or move the region to argument line"
