@@ -16,6 +16,7 @@
  (#\, . ce-command-swap-point)
  (#\/ . ce-command-search)
  (#\? . ce-command-search-before)
+ (#\$ . ce-command-end)
  (#\a . ce-command-add)
  (#\A . ce-command-add-before)
  (#\c . ce-command-line-replace)
@@ -303,6 +304,14 @@ commoned uses pregexp, which has the following license:
      (ce-walk-match -1 match (ce-mod outpoint len) 0))))
   (setq outpoint inpoint)
   (format t "~a~%" (car (nthcdr outpoint buffer))))
+
+(defun ce-command-end (&optional c)
+  "set outpoint to last line"
+  (declare (ignore c))
+  (when (not (= 2 newpoint))
+   (setq newpoint 3)
+   (setq inpoint -1))
+  (setq outpoint -1))
 
 (defun ce-add-til-dot (index lines)
   "read input until dot, add to buffer"
