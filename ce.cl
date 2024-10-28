@@ -187,17 +187,18 @@ commoned uses pregexp, which has the following license:
 (defun ce-command-enter (&optional c)
   "process newlines if not eaten by another command"
   (declare (ignore c))
-  (if (= 0 newpoint)
-   (if (>= (1+ outpoint) (list-length buffer))
-    (progn
-     (format t errf)
-     (return-from ce-command-enter))
-    (progn
-     (setq outpoint (1+ outpoint))
-     (setq inpoint outpoint)))
-   (ce-reset-input))
-  (let ((out (ce-mod outpoint (list-length buffer))))
-   (format t "~a~%" (car (nthcdr out buffer)))))
+  (let ((len (list-length buffer)))
+   (if (= 0 newpoint)
+    (if (>= (1+ (ce-mod outpoint len)) len)
+     (progn
+      (format t errf)
+      (return-from ce-command-enter))
+     (progn
+      (setq outpoint (1+ outpoint))
+      (setq inpoint outpoint)))
+    (ce-reset-input))
+   (let ((out (ce-mod outpoint len)))
+    (format t "~a~%" (car (nthcdr out buffer))))))
 
 (defun ce-command-eval (&optional c)
   "evaluate a lisp expression"
