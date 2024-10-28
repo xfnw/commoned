@@ -5,7 +5,7 @@ ed but lisp, and with many weird opinionated changes
 a standalone `ce` executable may be built using [embeddable common
 lisp](https://ecl.common-lisp.dev/) with the following command:
 ```sh
-ecl --load build.cl --eval '(quit)'
+ecl --shell build.cl
 ```
 
 you'll need ecl with development bindings (probably called ecl-dev).
