@@ -171,7 +171,11 @@ commoned uses pregexp, which has the following license:
      (if cmd
       (handler-case (funcall cmd input)
        (error (e) (setq err e) (format t errf)))
-      (progn (read-line) (setq newpoint 0) (format t errf)))))))
+      (progn
+       (read-line)
+       (setq newpoint 0)
+       (setq err "unknown command")
+       (format t errf)))))))
 
 (defun ce-main ()
   "initalize commoned from bin"
@@ -180,7 +184,7 @@ commoned uses pregexp, which has the following license:
    (case (list-length args)
     (0 ())
     (1 (ce-open (car args)))
-    (otherwise (format t errf))))
+    (otherwise (setq err "invalid arguments") (format t errf))))
   (ce-repl)
   (ext:quit 0))
 
@@ -190,9 +194,7 @@ commoned uses pregexp, which has the following license:
   (let ((len (list-length buffer)))
    (if (= 0 newpoint)
     (if (>= (1+ (ce-mod outpoint len)) len)
-     (progn
-      (format t errf)
-      (return-from ce-command-enter))
+     (error "reached end of file")
      (progn
       (setq outpoint (1+ outpoint))
       (setq inpoint outpoint)))
@@ -224,7 +226,7 @@ commoned uses pregexp, which has the following license:
   "increment n in dir direction until line matches match
   or n reaches stop"
   (if (or (= n stop) (= (+ n offset) stop))
-   (progn (format t errf) stop)
+   (progn (setq err "reached stop") (format t errf) stop)
    (let ((nn (+ n dir)))
     ; using nth like this is a bit silly and inefficent
     ; when walking forwards, but we can then reuse the
@@ -291,7 +293,7 @@ commoned uses pregexp, which has the following license:
        (ce-walk-match 1 match (ce-mod inpoint len) (1- len)))))
     (setq inpoint outpoint)
     (format t "~a~%" (car (nthcdr outpoint buffer))))
-   (progn (read-line) (format t errf))))
+   (progn (read-line) (error "empty buffer"))))
 
 (defun ce-command-search-before (&optional c)
   "set point at previous line to match argument"
@@ -366,14 +368,16 @@ commoned uses pregexp, which has the following license:
     (ce-delete in out)
     (ce-common-add in))))
 
-; TODO: needs error handling
 (defun ce-open (name)
   "function to open a file for editing"
   (setq filename name)
   (if (uiop:file-exists-p name)
    (handler-case (setq buffer (uiop:read-file-lines filename))
     (error (e) (setq err e) (format t errf)))
-   (format t errf)))
+   (progn
+    (setq buffer nil)
+    (setq err "does not exist")
+    (format t errf))))
 
 (defun ce-command-open (&optional c)
   "open a file for editing"
@@ -462,7 +466,7 @@ specific command. the recognized commands are as follows:
    (if (not (= 0 mlen))
     (let ((in (ce-mod inpoint mlen)) (out (1+ (ce-mod outpoint mlen))))
      (format t "~{~a~%~}" (subseq buffer in out)))
-    (format t errf))))
+    (error "empty buffer"))))
 
 (defun ce-command-quit (&optional c)
   "quit without saving"
@@ -478,8 +482,7 @@ specific command. the recognized commands are as follows:
   (let ((sep (read-char)))
    (if (char= #\Newline sep)
     (when (or (not query) (not ins) (not sfl))
-     (format t errf)
-     (return-from ce-command-reg-replace))
+     (error "nothing specified"))
     (let ((pat (ce-tokens (read-line) sep)))
      (setq query (car pat))
      (setq ins (or (nth 1 pat) ""))
@@ -505,8 +508,7 @@ specific command. the recognized commands are as follows:
   (let ((sep (read-char)))
    (if (char= #\Newline sep)
     (when (or (not query) (not sfl))
-     (format t errf)
-     (return-from ce-command-split))
+     (error "nothing specified"))
     (let ((pat (ce-tokens (read-line) sep)))
      (setq query (car pat))
      (setq sfl (or (nth 1 pat) "")))))
