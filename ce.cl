@@ -54,7 +54,9 @@
 option) any later version. see the LICENSE file for more info.
 
 commoned uses pregexp, which has the following license:
-~a" (uiop:read-file-string "pregexp/COPYING")))
+~a" (if (uiop:file-exists-p "pregexp/COPYING")
+(uiop:read-file-string "pregexp/COPYING")
+"cannot find license")))
 
 (defvar buffer nil)
 (defvar filename nil)
