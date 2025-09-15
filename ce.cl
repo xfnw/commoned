@@ -182,13 +182,15 @@ commoned uses pregexp, which has the following license:
 (defun ce-main ()
   "initalize commoned from bin"
   (ce-load-init)
-  (let ((args (cdr (ext:command-args))))
+  (let ((args
+	  #+ecl (cdr (ext:command-args))
+	  #-ecl (uiop:command-line-arguments)))
    (case (list-length args)
     (0 ())
     (1 (ce-open (car args)))
     (otherwise (setq err "invalid arguments") (format t errf))))
   (ce-repl)
-  (ext:quit 0))
+  (uiop:quit 0))
 
 (defun ce-command-enter (&optional c)
   "process newlines if not eaten by another command"
