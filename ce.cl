@@ -557,7 +557,7 @@ specific command. the recognized commands are as follows:
   (let ((name (read-line)))
    (with-open-file (out (if (string= "" name) filename name)
 			:direction :output
-			:if-exists :new-version
+			:if-exists :supersede
 			:if-does-not-exist :create)
     (format out "~{~a~%~}" buffer))))
 
